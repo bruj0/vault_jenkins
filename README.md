@@ -1,5 +1,7 @@
 # How to use HashiCorp Vault to store secrets and read them from Jenkins
 
+by Rodrigo A. Diaz Leven
+
 - [How to use HashiCorp Vault to store secrets and read them from Jenkins](#how-to-use-hashicorp-vault-to-store-secrets-and-read-them-from-jenkins)
   * [Description](#description)
   * [Why do we want to use it.](#why-do-we-want-to-use-it)
@@ -379,3 +381,14 @@ node {
 }
 ```
 
+# References
+
+A lot of information for this article was used from:
+
+- http://nicolas.corrarello.com/general/vault/security/ci/2017/04/23/Reading-Vault-Secrets-in-your-Jenkins-pipeline.html 
+
+The Docker compose project was based on:
+
+- https://github.com/tolitius/cault
+
+  ​
