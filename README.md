@@ -1,5 +1,23 @@
 # How to use HashiCorp Vault to store secrets and read them from Jenkins
 
+- [How to use HashiCorp Vault to store secrets and read them from Jenkins](#how-to-use-hashicorp-vault-to-store-secrets-and-read-them-from-jenkins)
+  * [Description](#description)
+  * [Why do we want to use it.](#why-do-we-want-to-use-it)
+  * [The setup](#the-setup)
+- [Initial Vault configuration](#initial-vault-configuration)
+  * [Checking Vault is unsealed](#checking-vault-is-unsealed)
+  * [Testing](#testing)
+- [Reading secrets from Jenkins](#reading-secrets-from-jenkins)
+  * [AppRole](#approle)
+  * [Generating Policies and Roles](#generating-policies-and-roles)
+  * [Generating Role ID](#generating-role-id)
+  * [Generating Jenkins Token ID](#generating-jenkins-token-id)
+  * [Configuring Jenkins credentials to access Vault](#configuring-jenkins-credentials-to-access-vault)
+  * [Reading the secret](#reading-the-secret)
+  * [Retrieving secrets from source code](#retrieving-secrets-from-source-code)
+  * [Job Output](#job-output)
+- [Optional: Installing Vault plugin for Jenkins](#optional--installing-vault-plugin-for-jenkins)
+
 ## Description
 
 In this article we will learn how to store secret or any other type of information you wish like Certificates in [Vault](https://www.vaultproject.io/) .
@@ -69,7 +87,7 @@ volumes:
 
 ```
 
-# Initial configuration
+# Initial Vault configuration
 
 The first command starts the container and the second one logs us in the Vault container to "unseal" it.
 
@@ -134,9 +152,9 @@ Here we store a secret text "behind-super-secret-password" in the path "secret/b
 
 ![image alt text](image_1.png)
 
-## Reading secrets from Jenkins
+# Reading secrets from Jenkins
 
-### AppRole
+## AppRole
 
 AppRole is a secure introduction method to establish machine identity. 
 
@@ -146,7 +164,7 @@ In AppRole, in order for the application to get a token, it would need to login 
 
 * Store the Role ID in the Jenkinsfile of each project
 
-### Generating Policies and Roles
+## Generating Policies and Roles
 
 Now Jenkins will need permissions to retrieve Secret IDs for our newly created role. Jenkins shouldn’t be able to access the secret itself, list other Secret IDs, or even the Role ID.
 
@@ -198,7 +216,7 @@ token_ttl           3600
 
 
 
-### Generating Role ID
+## Generating Role ID
 
 We generate a **Role ID** for our application that can be used in conjunction with the Jenkins **Token ID** to generate a **Secret ID** that will allow us to access the secret at the path "secret/hello" per our policy.
 
@@ -209,7 +227,7 @@ Key    	Value
 role_id	73ea4552-53da-6844-bab0-0d39d2dc06aa
 ```
 
-### Generating Jenkins Token ID
+## Generating Jenkins Token ID
 
 Jenkins needs a long lived token but it needs to be eventually rotated.
 
@@ -224,7 +242,7 @@ token_renewable	true
 token_policies 	[default jenkins]
 ```
 
-### Configuring Jenkins credentials to access Vault
+## Configuring Jenkins credentials to access Vault
 
 This is the long lived Token ID we generated for Jenkins use.
 
@@ -234,7 +252,7 @@ This is the Role ID for our example app and is restricted to "secret/hello" by o
 
 ![image alt text](image_3.png)
 
-### Reading the secret
+## Reading the secret
 
 Let’s write a secret that our application will consume:
 
@@ -323,7 +341,7 @@ We can also retrieve the secrets from an application at run time, using environm
 
 ![image alt text](image_5.png)
 
-## Optional: Installing Vault plugin for Jenkins
+# Optional: Installing Vault plugin for Jenkins
 
 More information: [https://github.com/jenkinsci/hashicorp-vault-plugin](https://github.com/jenkinsci/hashicorp-vault-plugin)
 
