@@ -19,6 +19,7 @@ by Rodrigo A. Diaz Leven
   * [Retrieving secrets from source code](#retrieving-secrets-from-source-code)
   * [Job Output](#job-output)
 - [Optional: Installing Vault plugin for Jenkins](#optional--installing-vault-plugin-for-jenkins)
+- [References](#references)
 
 ## Description
 
