@@ -100,16 +100,16 @@ This is only needed the first time we setup vault and you should store the keys 
 
 ```bash
 $ docker-compose up -d
-Creating cault_consul_1 ... 
-Creating cault_consul_1 ... done
-Creating cault_vault_1 ... 
-Creating cault_vault_1 ... done
-Creating cault_blueocean_1 ... 
-Creating cault_blueocean_1 ... done
+Creating vaultjenkins_consul_1 ... 
+Creating vaultjenkins_consul_1 ... done
+Creating vaultjenkins_vault_1 ... 
+Creating vaultjenkins_vault_1 ... done
+Creating vaultjenkins_blueocean_1 ... 
+Creating vaultjenkins_blueocean_1 ... done
 
-$ docker exec -it cault_vault_1 sh
+$ docker exec -it vaultjenkins_vault_1 sh
 
-(cault_vault_1)$ vault init
+(vaultjenkins_vault_1)$ vault init
 Unseal Key 1: d28dc3e20848c499749450b411bdc55416cefb0ff6ddefd01ec02088aa5c90aa01
 Unseal Key 2: ad2b7e9d02d0c1cb5b98fafbc2e3ea56bd4d4fa112a0c61882c1179d6c6585f302
 Unseal Key 3: c393269f177ba3d07b14dbf14e25a325205dfbf5c91769b8e55bf91aff693ce603
@@ -117,7 +117,7 @@ Unseal Key 4: 87c605e5f766d2f76d39756b486cbdafbb1998e72d2f766c40911f1a288e53a404
 Unseal Key 5: e97e5de7e2cdb0ec4db55461c4aaf4dc26092cb3f698d9cc270bf19dbb82eab105
 Initial Root Token: 5a4a7e11-1e2f-6f76-170e-b8ec58cd2da5
 
-(cault_vault_1)$ vault unseal (run this 3 times with 3 different keys from above)
+(vaultjenkins_vault_1)$ vault unseal (run this 3 times with 3 different keys from above)
 
 ```
 
@@ -136,7 +136,7 @@ The first command sets an alias so we dont have to keep typing the same thing ov
 We will use the Vault client from inside the container but you can use one installed in your local machine too.
 
 ```bash
-$ alias vault='docker exec -it cault_vault_1 vault "$@"'
+$ alias vault='docker exec -it vaultjenkins_vault_1 vault "$@"'
 
 $ vault write -address=http://127.0.0.1:8200 secret/billion-dollars value=behind-super-secret-password
 
@@ -176,9 +176,9 @@ In this case, tokens assigned to the **java-example** policy would have permissi
 ```bash
 $ echo 'path "auth/approle/role/java-example/secret-id" {
   capabilities = ["read","create","update"]
-}' > ./config/vault/jenkins_policy.hcl
+}' > ./config/vault/policies/jenkins_policy.hcl
 
-$ vault policy-write java-example /config/jenkins_policy.hcl
+$ vault policy-write jenkins ./config/vault/policies/jenkins_policy.hcl
 
 ```
 
@@ -188,8 +188,8 @@ Now we have to create a **Role **that will generate **tokens **associated with t
 ```bash
 $ echo 'path "secret/hello" {
   capabilities = ["read", "list"]
-}' > ./config/vault/java-example_policy.hcl
-$ vault policy-write java-example /config/java-example_policy.hcl
+}' > ./config/vault/policies/java-example_policy.hcl
+$ vault policy-write java-example ./config/vault/policies/java-example_policy.hcl
 
 Policy 'java-example' written.
 ```
