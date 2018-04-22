@@ -276,7 +276,7 @@ stages {
   stage('Integration Tests') {
       steps {
       sh 'curl -s -o vault.zip https://releases.hashicorp.com/vault/0.9.1/vault_0.9.1_linux_amd64.zip ; yes | unzip vault.zip '
-        withCredentials([string(credentialsId: 'JAVA_EXAMPLE_ROLE_ID', variable: 'ROLE_ID'),string(credentialsId: 'VAULT_TOKEN', variable: 'JENKINS_VAULT_TOKEN')]) {
+        withCredentials([string(credentialsId: 'JAVA_EXAMPLE_ROLE_ID', variable: 'ROLE_ID'),string(credentialsId: 'JENKINS_VAULT_TOKEN', variable: 'VAULT_TOKEN')]) {
         sh '''
   set +x
   export VAULT_ADDR=http://vault:8200
